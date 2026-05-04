@@ -73,3 +73,30 @@ article {
     padding-left: 20px;
     margin-bottom: 25px;
 }
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+.error-msg {
+    color: #e74c3c;
+    font-size: 0.85em;
+    font-weight: bold;
+    margin-top: 5px;
+}
