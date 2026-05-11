@@ -98,9 +98,59 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             
+            
             if (isValid) {
-                successMessage.style.display = 'block';
-                contactForm.reset(); 
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const originalBtnText = submitBtn.textContent;
+                submitBtn.textContent = 'Wysyłanie...';
+                submitBtn.disabled = true;
+
+                
+                const formData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    message: message,
+                    index: '66677' 
+                };
+
+                
+                const backendURL = 'https://formspree.io/f/mvzldwpo';
+
+                
+                fetch(backendURL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    
+                    if (response.ok) {
+                        successMessage.textContent = 'Dziękuję! Dane zostały zapisane na serwerze.';
+                        successMessage.style.display = 'block';
+                        successMessage.style.color = '#27ae60';
+                        contactForm.reset(); 
+                    } else {
+                        successMessage.textContent = 'Wystąpił błąd serwera. Spróbuj ponownie.';
+                        successMessage.style.display = 'block';
+                        successMessage.style.color = '#e74c3c';
+                    }
+                })
+                .catch(error => {
+                    console.error('Błąd:', error);
+                    successMessage.textContent = 'Błąd połączenia. Sprawdź internet.';
+                    successMessage.style.display = 'block';
+                    successMessage.style.color = '#e74c3c';
+                })
+                .finally(() => {
+                    
+                    submitBtn.textContent = originalBtnText;
+                    submitBtn.disabled = false;
+                });
             }
         });
     }
