@@ -138,4 +138,93 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.error('Błąd podczas pobierania danych:', error);
         });
+
+
+
+        
+    
+    const noteInput = document.getElementById('noteInput');
+    const addNoteBtn = document.getElementById('addNoteBtn');
+    const notesList = document.getElementById('notesList');
+
+    
+    function loadNotes() {
+        if (!notesList) return; 
+        
+        
+        const savedNotes = JSON.parse(localStorage.getItem('cv_notes')) || [];
+        
+        
+        notesList.innerHTML = '';
+        
+        
+        savedNotes.forEach((noteText, index) => {
+            const li = document.createElement('li');
+            li.style.display = 'flex';
+            li.style.justifyContent = 'space-between';
+            li.style.alignItems = 'center';
+            li.style.marginBottom = '10px';
+            li.style.padding = '10px 15px';
+            li.style.background = '#fcfcfc'; 
+            li.style.border = '1px solid #ddd';
+            li.style.borderRadius = '5px';
+            li.style.color = '#333';
+
+            const span = document.createElement('span');
+            span.textContent = noteText;
+
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.textContent = 'Usuń';
+            deleteBtn.style.background = '#e74c3c'; 
+            deleteBtn.style.color = 'white';
+            deleteBtn.style.border = 'none';
+            deleteBtn.style.borderRadius = '3px';
+            deleteBtn.style.padding = '5px 10px';
+            deleteBtn.style.cursor = 'pointer';
+
+            
+            deleteBtn.addEventListener('click', () => {
+                const currentNotes = JSON.parse(localStorage.getItem('cv_notes')) || [];
+                currentNotes.splice(index, 1); 
+                localStorage.setItem('cv_notes', JSON.stringify(currentNotes)); 
+                loadNotes(); 
+            });
+
+            li.appendChild(span);
+            li.appendChild(deleteBtn);
+            notesList.appendChild(li);
+        });
+    }
+
+    
+    if (addNoteBtn && noteInput) {
+        addNoteBtn.addEventListener('click', () => {
+            const text = noteInput.value.trim();
+            if (text !== '') {
+                
+                const currentNotes = JSON.parse(localStorage.getItem('cv_notes')) || [];
+                
+                currentNotes.push(text);
+                
+                localStorage.setItem('cv_notes', JSON.stringify(currentNotes));
+                
+                
+                noteInput.value = '';
+                loadNotes();
+            } else {
+                alert('Wpisz tekst notatki przed dodaniem!');
+            }
+        });
+
+        
+        noteInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addNoteBtn.click();
+            }
+        });
+    }
+
+    
+    loadNotes();
 });
